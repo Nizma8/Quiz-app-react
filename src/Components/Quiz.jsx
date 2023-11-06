@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import questions from "../question";
 import Card from "react-bootstrap/Card";
-import { Alert, Button, CardBody, CardTitle } from "react-bootstrap";
+import { Alert, Button, Col } from "react-bootstrap";
 import ProgressBar from "react-bootstrap/ProgressBar";
-function Quiz({username}) {
+
+function Quiz({ username }) {
   const [activeQuestion, setActiveQuestion] = useState(0);
   const [answer, SetAnswer] = useState("");
   const [showCard, setShowCard] = useState(false);
@@ -33,7 +34,7 @@ function Quiz({username}) {
       SetAnswer(false);
     }
   };
- console.log(username);
+
   const OnselectNext = () => {
     if (answer !== "") {
       if (activeQuestion === totalQuestions - 1) {
@@ -55,110 +56,80 @@ function Quiz({username}) {
       alert("please select an answer");
     }
   };
+
   const reset = () => {
     setActiveQuestion(0);
     SetAnswer("");
     setResult({ score: 0, Correct: 0, Wrong: 0 });
     setShowCard(false);
     SetSelecteAnswer("");
-    
-
   };
+
   return (
-    <>
-     {questionData &&
+    <div className="container shadow-lg">
+      {questionData &&
             activeQuestion >= 0 &&
             activeQuestion < questionData.length?
-     
-     <div className="w-50 d-flex flex-column  shadow-lg ">
-        {/* heading */}
-        {/* <Card className="w-100  py-3">
-          <h3>
-            {questionData &&
-            activeQuestion >= 0 &&
-            activeQuestion < questionData.length
-              ? ""
-              : "Results"}
-          </h3>
-        </Card> */}
-        {/* progressive bar */}
-        <ProgressBar now={now} variant="black" />
-        {/* question */}
-        <div className=" ">
-          <p className="p-4 text-black shadow-sm bg-info qu">
-            {" "}
-           {questionData &&
-            activeQuestion >= 0 &&
-            activeQuestion < questionData.length
-              ?`${activeQuestion+1}/ ${totalQuestions}`:""} {" "} { 
-            questionData &&
-            activeQuestion >= 0 &&
-            activeQuestion < questionData.length
-              ? (questionData[activeQuestion].question)
-              : ""}
-          </p>
-          {/* list */}
-          <ol className=" text-black pb-5 pt-2  w-100">
-            {questionData &&
-            activeQuestion >= 0 &&
-            activeQuestion < questionData.length
-              ? questionData[activeQuestion].options.map((item, index) => {
-                  return (
-                    <li
-                      className={`border-bottom w-100 py-3 px-3 border-info ${
-                        item == selectedAnswer
-                          ? selectedAnswer == CorrectAnswer
-                            ? "bg-success"
-                            : "bg-danger"
-                          : "bg-white"
-                      }`}
-                      key={index}
-                      onClick={() => {
-                        onSelectedAnswer(item);
-                      }}
-                    >
-                     • {item}
-                    </li>
-                  );
-                })
-              : ""}
-          </ol>
-          {/* button */}
-          
-            <button
-              onClick={OnselectNext}
-              className="px-5 py-2  mb-3 bg-info shadow-lg  "
-              style={{ marginLeft: "290px",border:"none" }}
-            >
-              {activeQuestion === totalQuestions - 1 ? "finish" : "NEXT"}
-            </button>
-          
-        </div>
-       
-      </div> :<div className="w-50 d-flex  border rounded border-5 ">
-          <Card style={{ width: "100%" }} className="shadow-lg p-3 bg-white">
-            <Card.Body className="text-center" >
-              <p className="text-black">Your Score: {score}%</p>
-              
-               
-               <p className="text-black">   Correct Answers:{result.Correct}</p>
-                
-                <p className="text-black">WrongAnswers:{result.Wrong}</p>
-              
-              <Alert variant={score >= 70 ? "success" : "danger"}>
-                {score >= 70
-                  ? "Congratulations! You passed the quiz."
-                  : "You did not pass the quiz."}
-              </Alert>
+        (<div className="row">
+        <div className="col-md-12 mx-auto">
+          <ProgressBar now={now} variant="black" />
+          <Card className="mb-4">
+            <Card.Body className="bg-info  ">
+              <Card.Title className="text-white" >
+                Question {activeQuestion + 1} / {totalQuestions}
+              </Card.Title>
+              <p className="text-white qu">{questionData[activeQuestion].question}</p>
             </Card.Body>
-            <Button onClick={reset} className="w-25 ml-5 bg-info" style={{marginLeft:"270px"}}>Reset</Button>
           </Card>
+          <ul className="list-group">
+            {questionData[activeQuestion].options.map((item, index) => (
+              <li
+                className={`list-group-item  text-black  border rounded mb-2 ${
+                  item === selectedAnswer
+                    ? item === CorrectAnswer
+                      ? "bg-success"
+                      : "bg-danger"
+                    : "bg-light"
+                }`}
+                key={index}
+                onClick={() => onSelectedAnswer(item)}
+              >
+                {item}
+              </li>
+            ))}
+          </ul>
+         <Col  >
+            <Button
+              className="mt-3 w-25 mb-3 rounded " style={{marginLeft:"22rem"}}
+              onClick={OnselectNext}
+              variant="info"
+              disabled={answer === ""}
+            >
+              {activeQuestion === totalQuestions - 1 ? "Finish" : "Next"}
+            </Button>
+         </Col>
         </div>
+      </div>): <div className="row mt-4">
+          <div className="col-md-8 mx-auto">
+            <Card>
+              <Card.Body className="text-center ">
+                <Card.Text>Your Score: {score}%</Card.Text>
+                <Card.Text>Correct Answers: {result.Correct}</Card.Text>
+                <Card.Text>Wrong Answers: {result.Wrong}</Card.Text>
+                <Alert variant={score >= 70 ? "success" : "danger"}>
+                  {score >= 70
+                    ? "Congratulations! You passed the quiz."
+                    : "You did not pass the quiz."}
+                </Alert>
+                <Button onClick={reset} variant="info" className="mt-3">
+                  Reset
+                </Button>
+              </Card.Body>
+            </Card>
+          </div>
+        </div>}
       
-      }
-
-
-    </>
+    </div>
   );
 }
 
