@@ -1,0 +1,12 @@
+li{
+    cursor: pointer;
+    list-style: none;
+    margin:0
+;padding: 0;
+display: block;
+font-size: 18px;
+}
+.qu{
+    font-family: "Noto Serif Old Uyghur",sans-serif;
+}
+
