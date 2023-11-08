@@ -4,7 +4,7 @@ import Card from "react-bootstrap/Card";
 import { Alert, Button, Col } from "react-bootstrap";
 import ProgressBar from "react-bootstrap/ProgressBar";
 
-function Quiz({ username }) {
+function Quiz({ username,DataFromCategory,setQuizStarted }) {
   const [activeQuestion, setActiveQuestion] = useState(0);
   const [answer, SetAnswer] = useState("");
   const [showCard, setShowCard] = useState(false);
@@ -14,12 +14,11 @@ function Quiz({ username }) {
     Correct: 0,
     Wrong: 0,
   });
-  const { totalQuestions, questionData, totalScore } = questions;
-  const CorrectAnswer = questionData.map((items) => items.correctAnswer)[
+  const { totalQuestions,  totalScore } = questions;
+  const CorrectAnswer = DataFromCategory.map((items) => items.correctAnswer)[
     [activeQuestion]
   ];
   const progress = Math.round((activeQuestion / totalQuestions) * 100);
-
   const now = progress;
   const score = Math.round((result.score / totalScore) * 100);
   const onSelectedAnswer = (selectedAnswer) => {
@@ -63,13 +62,14 @@ function Quiz({ username }) {
     setResult({ score: 0, Correct: 0, Wrong: 0 });
     setShowCard(false);
     SetSelecteAnswer("");
+    setQuizStarted(false)
   };
 
   return (
     <div className="container shadow-lg">
-      {questionData &&
+      {DataFromCategory &&
             activeQuestion >= 0 &&
-            activeQuestion < questionData.length?
+            activeQuestion < DataFromCategory.length?
         (<div className="row">
         <div className="col-md-12 mx-auto">
           <ProgressBar now={now} variant="black" />
@@ -78,11 +78,11 @@ function Quiz({ username }) {
               <Card.Title className="text-white" >
                 Question {activeQuestion + 1} / {totalQuestions}
               </Card.Title>
-              <p className="text-white qu">{questionData[activeQuestion].question}</p>
+              <p className="text-white qu">{DataFromCategory[activeQuestion].question}</p>
             </Card.Body>
           </Card>
           <ul className="list-group">
-            {questionData[activeQuestion].options.map((item, index) => (
+            {DataFromCategory[activeQuestion].options.map((item, index) => (
               <li
                 className={`list-group-item  text-black  border rounded mb-2 ${
                   item === selectedAnswer
